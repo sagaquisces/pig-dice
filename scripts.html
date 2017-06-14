@@ -1,0 +1,68 @@
+
+var playerArray = [];
+
+var Player = function () {
+  this.score = 0;
+  this.hasDie = false;
+}
+
+Player.prototype.updateScore = function (points) {
+  return this.score += points;
+}
+
+Player.prototype.pushThis = function() {
+  playerArray.push(this);
+}
+
+var Die = function(sides)  {
+  this.sides = sides || 6;
+}
+
+Die.prototype.roll = function () {
+  return Math.floor((Math.random()*this.sides)+1);
+}
+
+var die = new Die();
+
+var player1 = new Player();
+player1.pushThis();
+player1.hasDie = true;
+
+var player2 = new Player();
+player2.pushThis();
+
+$.each(playerArray, function() {
+	alert (this.hasDie);
+});
+
+$("document").ready(function () {
+  $("form").submit(function (event) {
+    event.preventDefault();
+
+    var rollAmount = die.roll();
+
+    if (player1.hasDie) {
+    	console.log ("Player 1 rolls " + rollAmount + ".");
+      if (rollAmount == 1) {
+        player2.hasDie = true;
+        player1.hasDie = false;
+        rollAmount = 0;
+      }
+      console.log ("Player 1 total score now " + player1.updateScore(rollAmount) + ".");
+    } else {
+    	console.log ("Player 2 rolls " + rollAmount + ".");
+      if (rollAmount == 1) {
+        player1.hasDie = true;
+        player2.hasDie = false;
+        rollAmount = 0;
+      }
+      console.log ("Player 2 total score now " + player2.updateScore(rollAmount) + ".");
+    }
+
+
+
+
+//    console.log("Player rolls " + rollAmount);
+//    console.log("Player total score now " + player.updateScore(rollAmount))
+  });
+});
